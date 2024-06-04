@@ -1,5 +1,3 @@
-import { callbackify } from 'util'
-
 const { app } = require('electron')
 const path = require('path')
 const fs = require('fs')
@@ -31,22 +29,24 @@ export function WriteFile(name, data) {
     return status
   }
 }
-export function ReadInvoiceFolder() {
-  let dir
+export function WriteInvoiceFolder(name) {
+  let status = { error: false, message: 'Folder ready' }
   try {
-    dir = fs.readdirSync(filePath('invoices'), 'utf-8')
-    return dir
+    fs.mkdirSync(filePath(name), { recursive: true })
   } catch (error) {
-    try {
-      let status = ReadFile('status.json')
-      fs.mkdirSync(filePath('invoices'), { recursive: true })
-      fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
-      status.data.invoiceList.push('invoice0.json')
-      WriteFile('status.json', status.data)
-      return fs.readdirSync(filePath('invoices'), 'utf-8')
-    } catch (error) {
-      StatusMaintainer(ReadInvoiceFolder, null)
-    }
+    status.error = true
+    status.message = 'failed to create folder'
+    console.log(error)
+  } finally {
+    return status
+  }
+}
+export function ReadInvoiceFolder() {
+  try {
+    return fs.readdirSync(filePath('invoices'), 'utf-8')
+  } catch (error) {
+    console.log(error)
+    return []
   }
 }
 export function ReadSingleInvoiceFile(name) {
@@ -65,7 +65,7 @@ export function WriteInvoiceFile(name, data) {
   let status = { error: false, message: 'File ' + name + ' writing successful', data: data }
   try {
     let newItem = JSON.stringify(data)
-    fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', name), newItem, (err) => {})
+    fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', name), newItem, 'utf-8')
   } catch (err) {
     status.error = true
     status.message = 'File ' + name + ' writing failed'
@@ -74,36 +74,37 @@ export function WriteInvoiceFile(name, data) {
     return status
   }
 }
-export function StatusMaintainer(callBack, args) {
-  let template = {
-    invoiceList: [],
-    date: Date.now(),
-    soldToday: []
-  }
-  let currentStatus = ReadFile('status.json')
-  if (currentStatus.error) {
-    try {
-      let files = ReadInvoiceFolder()
-      if (files.length == 0) {
-        //passed
-        template.invoiceList.push('invoice0.json')
-        WriteFile('status.json', template)
-        fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
-      } else {
-        //passed
-        files.forEach((ele) => template.invoiceList.push(ele))
-        WriteFile('status.json', template)
-      }
-    } catch (error) {
-      //passed
-      fs.mkdirSync(filePath('invoices'), { recursive: true })
-      fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
-      template.invoiceList.push('invoice0.json')
-      WriteFile('status.json', template)
-    } finally {
-      callBack(args)
-    }
-  } else {
-    callBack(args)
-  }
-}
+//Excess code not necessary
+// export function StatusMaintainer(callBack, args) {
+//   let template = {
+//     invoiceList: [],
+//     date: Date.now(),
+//     soldToday: []
+//   }
+//   let currentStatus = ReadFile('status.json')
+//   if (currentStatus.error) {
+//     try {
+//       let files = ReadInvoiceFolder()
+//       if (files.length == 0) {
+//         //passed
+//         template.invoiceList.push('invoice0.json')
+//         WriteFile('status.json', template)
+//         fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
+//       } else {
+//         //passed
+//         files.forEach((ele) => template.invoiceList.push(ele))
+//         WriteFile('status.json', template)
+//       }
+//     } catch (error) {
+//       //passed
+//       fs.mkdirSync(filePath('invoices'), { recursive: true })
+//       fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
+//       template.invoiceList.push('invoice0.json')
+//       WriteFile('status.json', template)
+//     } finally {
+//       callBack(args)
+//     }
+//   } else {
+//     callBack(args)
+//   }
+// }

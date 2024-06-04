@@ -3,63 +3,58 @@ import {
   ReadInvoiceFolder,
   ReadSingleInvoiceFile,
   StatusMaintainer,
-  WriteInvoiceFile
+  WriteInvoiceFile,
+  WriteInvoiceFolder
 } from './files'
-
+//tested
 export function GetInvoice(args) {
-  let status = ReadFile('status.json')
-  let result = {}
-  if (status.error) {
-    return StatusMaintainer(GetInvoice, args)
-  } else {
-    let pageX = args.page * 25
-    let num = Math.floor(pageX / 1000)
-    let name = 'invoice' + num + '.json'
-    let allInvoiceFiles = ReadInvoiceFolder()
-    let invoiceData = ReadSingleInvoiceFile(name)
-    if (allInvoiceFiles.length == 1) {
-      result.length = invoiceData.length()
-    } else if (allInvoiceFiles.length > 1) {
-      for (let i = 0; i < allInvoiceFiles.length - 1; i++) {
-        result.length += 1000
-      }
-      result.length += invoiceData.length()
-    } else {
-      result.length = 0
-    }
-    result.data = invoiceData.data.slice(pageX, pageX + 25)
-    return result
-  }
+  let result = []
+  let pageX = args.page * 25
+  let num = Math.floor(pageX / 1000)
+  let name = 'invoice' + num + '.json'
+  console.log(name, num)
+  let { data } = ReadSingleInvoiceFile(name)
+  result = data.slice(pageX, 25)
+  return { invoices: result }
 }
+//tested for possible errors
 export function AddInvoice(args) {
   let invoiceFileList = ReadInvoiceFolder()
-  //if already have files more than 1
   if (invoiceFileList.length > 1) {
-    let invoiceData = ReadSingleInvoiceFile(invoiceFileList[invoiceFileList.length - 1])
-    if (invoiceData.length == 1000) {
+    //tested
+    let { data } = ReadSingleInvoiceFile(invoiceFileList[invoiceFileList.length - 1])
+    // tested
+    if (data.length == 1000) {
       let newInvoiceFile = 'invoice' + invoiceFileList.length + '.json'
-      return WriteInvoiceFile(newInvoiceFile, args.data)
+      args.id = 0
+      return WriteInvoiceFile(newInvoiceFile, [args])
     } else {
-      invoiceData.push(args.data)
-      WriteInvoiceFile(invoiceFileList[invoiceFileList.length - 1], invoiceData)
+      //Tested
+      args.id = data.length
+      data.push(args)
+      return WriteInvoiceFile(invoiceFileList[invoiceFileList.length - 1], data)
     }
   } else if (invoiceFileList.length == 1) {
-    let invoiceData = ReadSingleInvoiceFile(invoiceFileList[0])
-    if (invoiceData.length == 1000) {
-      console.log('invoice is 10000')
+    //tested
+    let { data } = ReadSingleInvoiceFile(invoiceFileList[0])
+    if (data.length == 1000) {
+      // tested
       let newInvoiceFile = 'invoice' + invoiceFileList.length + '.json'
-      return WriteInvoiceFile(newInvoiceFile, args)
+      args.id = 0
+      return WriteInvoiceFile(newInvoiceFile, [args])
     } else {
-      let { data } = ReadSingleInvoiceFile('invoice0.json')
-      console.log('Entered :', 'INvoice data: ', data)
+      //tested
+      args.id = data.length
       data.push(args)
-
-      console.log('after push :', 'INvoice data: ', data)
       return WriteInvoiceFile(invoiceFileList[0], data)
     }
   } else {
-    let newInvoiceFile = 'invoice0.json'
-    return WriteInvoiceFile(newInvoiceFile, args.data)
+    //tested
+    let { error } = WriteInvoiceFolder('invoices')
+    if (!error) {
+      args.id = 0
+      return WriteInvoiceFile('invoice0.json', [args])
+    }
   }
 }
 export function DeleteInvoice(para) {

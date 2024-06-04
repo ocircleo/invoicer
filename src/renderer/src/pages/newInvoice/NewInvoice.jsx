@@ -223,6 +223,7 @@ const NewInvoice = () => {
         input.setAttribute("type", type);
         input.setAttribute("name", name);
         input.setAttribute("placeholder", placeholder);
+        input.setAttribute("required", true)
         input.classList.add("w-full", "p-2", "rounded", "group", "border-b-2", "outline-none", "border-blue-500")
 
         switch (name) {
@@ -238,14 +239,12 @@ const NewInvoice = () => {
             }
             case "weight": {
                 fieldSet.classList.add("flex", "flex-col", "gap-2", "p-1", "col-span-5", "md:col-span-2", "lg:col-span-1")
-                input.value = 1;
+                input.defaultValue = 1;
                 break;
             }
             case "quantity": {
-
                 fieldSet.classList.add("flex", "flex-col", "gap-2", "p-1", "col-span-5", "md:col-span-1", "relative")
-
-                input.value = 1;
+                input.defaultValue = 1;
                 break;
             }
         }
@@ -282,8 +281,8 @@ const NewInvoice = () => {
             <form ref={formRef} onSubmit={submitFrom} className='flex flex-col justify-center items-center'>
                 <div id="field" ref={fieldRef} className="grid grid-cols-5 gap-2 w-full px-12 items-center ">
                     <fieldset className='flex flex-col gap-2 p-1  col-span-5 lg:col-span-2 relative 1234' data-id="1234">
-                        <label htmlFor="item" className='font-semibold text-lg'>Item name</label>
-                        <input type="text" name="item" placeholder="Enter new item name" onChange={autoFill} className='w-full p-2 rounded group border-b-2 outline-none border-blue-500 ' />
+                        <label htmlFor="item" className='font-semibold text-lg' >Item name</label>
+                        <input type="text" required={true} name="item" placeholder="Enter new item name" onChange={autoFill} className='w-full p-2 rounded group border-b-2 outline-none border-blue-500 ' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
@@ -291,15 +290,15 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-2 lg:col-span-1 1234'>
                         <label htmlFor="price" className='font-semibold text-lg'>Item Price</label>
-                        <input type="number" name="price" placeholder="Enter Price" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500 1234' />
+                        <input type="number" required={true} name="price" placeholder="Enter Price" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500 1234' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-2 lg:col-span-1'>
                         <label htmlFor="weight" className='font-semibold text-lg'>Weight</label>
-                        <input type="text" defaultValue={1} name="weight" placeholder="Enter Weight" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="text" required={true} defaultValue={1} name="weight" placeholder="Enter Weight" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-1'>
                         <label htmlFor="quantity" className='font-semibold text-lg'>Quantity</label>
-                        <input type="number" defaultValue={1} name="quantity" placeholder="Enter quantity" className='w-full p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="number" required={true} defaultValue={1} name="quantity" placeholder="Enter quantity" className='w-full p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                 </div>
                 <button onClick={addField} type="button" className="text-white bg-blue-500 px-4 py-2 font-semibold rounded mt-3 duration-100 active:scale-90">Add Item</button>
@@ -307,13 +306,13 @@ const NewInvoice = () => {
 
                     <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
                         <label htmlFor="name" className='font-semibold text-lg'> name</label>
-                        <input onChange={userInfoFill} type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input onChange={userInfoFill} type="text" required={true} name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
-                        <label htmlFor="phone" className='font-semibold text-lg'>phone</label>
+                        <label htmlFor="phone" required={true} className='font-semibold text-lg'>phone</label>
                         <input type="number" name="phone" id="phone" placeholder="Enter Price" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
@@ -330,7 +329,7 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="delivery" className='font-semibold text-lg'>delivery Date</label>
-                        <input type="date" name="delivery" id="delivery" placeholder="Delivery date" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="date" required={true} name="delivery" id="delivery" placeholder="Delivery date" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="box" className='font-semibold text-lg'>box number</label>
@@ -342,11 +341,11 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="paid" className='font-semibold text-lg'>paid</label>
-                        <input type="number" name="paid" id="paid" placeholder="paid amount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="number" required={true} name="paid" id="paid" placeholder="paid amount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="discount" className='font-semibold text-lg'>discount</label>
-                        <input type="text" name="discount" id="discount" placeholder="Enter discount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="text" name="discount" defaultValue={0} id="discount" placeholder="Enter discount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                 </div>
                 <div className="flex gap-2 flex-shrink flex-wrap items-center justify-center mt-12">
@@ -376,7 +375,6 @@ const NewInvoice = () => {
             </div>
             <PrintInvoice print={print} setPrint={setPrint} data={data}></PrintInvoice>
         </div>
-        //{subtotal:0,discount:0,paid:0,due:0}
     );
 };
 export default NewInvoice;

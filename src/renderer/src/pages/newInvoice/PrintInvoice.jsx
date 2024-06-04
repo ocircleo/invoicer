@@ -46,6 +46,7 @@ const PrintInvoice = ({ print, setPrint, data }) => {
 
                     </div>
                     <div>
+                        <p><span className='font-semibold'>Box No:</span> {data?.boxNumber  || "N/A"}</p>
                         <p><span className='font-semibold'>Date:</span> {data.day + " " + months[data.month] + " " + data.year}</p>
                         <p><span className='font-semibold'>Time:</span> {data.hours}: {data.minutes} {data.timeType}</p>
                     </div>
@@ -74,16 +75,16 @@ const PrintInvoice = ({ print, setPrint, data }) => {
                     <div>
                         <p><span className='font-semibold'>Agent Name:</span> {data?.agentName}</p>
                         <p><span className='font-semibold'>Delivery Date:</span> {data?.delivery}</p>
-                        <p><span className='font-semibold'>Box Number:</span> {initialTotal}</p>
+                        <p><span className='font-semibold'>Box Number:</span> {data?.boxNumber || "N/A"}</p>
 
 
                     </div>
                     <div>
-                        <p><span className='font-semibold'>Subtotal:</span> {initialTotal}</p>
-                        <p><span className='font-semibold'>Discount: </span>{data?.discount || 0}</p>
-                        <p><span className='font-semibold'>Total: </span>{afterDiscount}</p>
-                        <p><span className='font-semibold'>Paid: </span>{data?.paid}</p>
-                        <p><span className='font-semibold'>Due: </span>{due}</p>
+                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Subtotal:</span> {initialTotal}</p>
+                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold '>Discount: </span>{data?.discount || 0}</p>
+                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Total: </span>{afterDiscount}</p>
+                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Paid: </span>{data?.paid}</p>
+                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Due: </span>{due}</p>
                     </div>
 
 
