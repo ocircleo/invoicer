@@ -1,32 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2'
-import { DataContext } from '../../utls/Provider';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateState } from '../../State/slice/updateSlice';
 const api = window.electron.ipcRenderer;
-let memos = 0;
 const NewUser = () => {
-    const { refreshUser, update, setUpdate } = useContext(DataContext)
+    const dispatch = useDispatch()
+    const update = useSelector((state) => state.update.status)
     const [admin, setAdmin] = useState(false)
     const [show, setShow] = useState(false);
-    api.on("user", (e, data) => {
-        if (memos == data.resId) return;
-        memos = data.resId;
-        if (data.error) {
-            Swal.fire({
-                title: data.message,
-                icon: "error",
-            })
-        } else {
-            Swal.fire({
-                title: "Success full",
-                icon: "success"
-            }).then((result) => {
-                if (formRef.current) formRef.current.reset()
-                setUpdate({ type: "", data: {}, state: false })
-                refreshUser()
-
-            });
-        }
-    })
     let formRef = useRef(null)
     // ===== Work of form ====
     const submitFrom = (e) => {
@@ -41,11 +21,12 @@ const NewUser = () => {
         password = form.password.value;
         const formData = { name, phone, address, email, id: update.data.id, role, password }
         if (update.state && update.type == "user") {
-            api.send("api", { path: { to: "updateUser", replyTo: "user" }, args: formData })
+            api.send("api", { path: { to: "updateUser", replyTo: "getAllUser" }, args: formData })
 
         } else {
-            api.send("api", { path: { to: "addUser", replyTo: "user" }, args: formData })
+            api.send("api", { path: { to: "addUser", replyTo: "getAllUser" }, args: formData })
         }
+        dispatch(updateState({ type: "", data: {}, state: false }))
         setAdmin(false)
         setShow(false)
         form.reset()
@@ -116,7 +97,7 @@ const NewUser = () => {
 
                 </fieldset>
                 <fieldset className='grid grid-cols-2 gap-2 p-1 w-96'>
-                    <button onClick={() => setUpdate({ type: "", data: {}, state: false })} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
+                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
 
                     <button type="submit" className="bg-green-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Submit" : "Update"}</button>
                 </fieldset>

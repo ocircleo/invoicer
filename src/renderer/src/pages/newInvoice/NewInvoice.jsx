@@ -1,8 +1,12 @@
 import { useContext, useRef, useState } from "react";
 import PrintInvoice from "./PrintInvoice";
-import { DataContext } from "../../utls/Provider";
+import { DataContext } from "../../utls/APIHANDELER";
+import { useSelector } from "react-redux";
+
 const NewInvoice = () => {
-    const { items, users, api } = useContext(DataContext)
+    const { api } = useContext(DataContext)
+    const users = useSelector((state)=> state.users.users)
+    const items = useSelector((state)=> state.items.items)
     const [print, setPrint] = useState(false)
     const [data, setData] = useState({})
     const [calc, setCalc] = useState({ subtotal: 0, discount: 0, total: 0, paid: 0, due: 0 })
@@ -51,7 +55,6 @@ const NewInvoice = () => {
             let afterDiscount = initialTotal - Number(discount) || 0;
             let due = afterDiscount - Number(paid) || 0;
             setCalc({ subtotal: initialTotal, discount: discount, total: afterDiscount, paid: paid, due: due })
-            console.log({ initialTotal, afterDiscount, paid, due });
         }
     }
     const submitFrom = (e) => {
@@ -160,7 +163,6 @@ const NewInvoice = () => {
             }
         }
     }
-
     const fillItUp = (e, ele) => {
         let target = e.target.classList.contains("fill") ? e.target.parentElement.parentElement : e.target.parentElement.parentElement.parentElement;
         let field = target

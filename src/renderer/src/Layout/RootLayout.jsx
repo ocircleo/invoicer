@@ -3,8 +3,6 @@ import { Outlet } from "react-router-dom";
 import Activelink from "../components/Links/Activelink";
 import nav from './nav.module.css'
 import { useState } from "react";
-import UsersData from "../utls/UsersData";
-import ItemsData from "../utls/ItemsData";
 const RootLayout = () => {
     const [navState, setNavState] = useState(false)
 
@@ -14,15 +12,13 @@ const RootLayout = () => {
         { path: "/invoices", text: "Invoices" },
         { path: "/users", text: "users" },
         { path: "/storeInfo", text: "store info" },
-        { path: "/dev", text: "Developers" },
+        // { path: "/dev", text: "Developers" },
 
     ]
     const toggleNav = () => setNavState(!navState)
 
     return (
         <div className="bg-gray-50 h-screen w-full flex">
-            <UsersData></UsersData>
-            <ItemsData></ItemsData>
             <div className="hidden md:w-64 bg-white h-full overflow-y-scroll md:flex flex-col gap-2 px-1 pt-3 pb-12">
 
                 <Activelink to={"/"} toggle={null}>Home</Activelink>

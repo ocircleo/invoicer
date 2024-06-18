@@ -53,7 +53,7 @@ const PrintInvoice = ({ print, setPrint, data }) => {
                 </div>
 
                 <div>
-                    <div className='grid grid-cols-6 mt-3 px-2 border-2 border-gray-600 rounded text-center'>
+                    <div className='grid grid-cols-6 mt-4 px-2 border-2 border-gray-600  text-center'>
                         <p className='font-semibold border-r-2 py-2 border-gray-600'>SL No:</p>
                         <p className='font-semibold  col-span-2 border-r-2 py-2 border-gray-600'>Name</p>
                         <p className='font-semibold border-r-2 py-2 border-gray-600 '>Price</p>
@@ -61,30 +61,28 @@ const PrintInvoice = ({ print, setPrint, data }) => {
                         <p className='font-semibold py-2'>weight</p>
                     </div>
                     {
-                        newItems.map((ele, index) => <div key={ele.index} className='border-2 border-gray-400 rounded grid grid-cols-6 my-2 px-2 '>
-                            <p className='col-span-1 text-center border-r-2 py-2 border-gray-400'>{index + 1}</p>
-                            <p className='col-span-2 border-r-2 py-2 border-gray-400 text-center'>{ele?.name}</p>
-                            <p className='border-r-2 py-2 border-gray-400 text-center'>{ele?.price}</p>
-                            <p className='border-r-2 py-2 border-gray-400 text-center'>{ele?.weight}</p>
+                        newItems.map((ele, index) => <div key={ele.index} className='border-t-0 border-2  border-gray-600  grid grid-cols-6 px-2 '>
+                            <p className='col-span-1 text-center border-r-2 py-2 border-gray-600'>{index + 1}</p>
+                            <p className='col-span-2 border-r-2 py-2 border-gray-600 text-center'>{ele?.name}</p>
+                            <p className='border-r-2 py-2 border-gray-600 text-center'>{ele?.price}</p>
+                            <p className='border-r-2 py-2 border-gray-600 text-center'>{ele?.weight}</p>
                             <p className='py-2 text-center'>{ele?.quantity}</p>
                         </div>)
                     }
                 </div>
 
-                <div title='total' className='flex justify-between px-2'>
+                <div title='total' className='flex justify-between pe-2 mt-4'>
                     <div>
                         <p><span className='font-semibold'>Agent Name:</span> {data?.agentName}</p>
                         <p><span className='font-semibold'>Delivery Date:</span> {data?.delivery}</p>
-                        <p><span className='font-semibold'>Box Number:</span> {data?.boxNumber || "N/A"}</p>
-
-
+                        
                     </div>
                     <div>
-                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Subtotal:</span> {initialTotal}</p>
-                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold '>Discount: </span>{data?.discount || 0}</p>
-                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Total: </span>{afterDiscount}</p>
-                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Paid: </span>{data?.paid}</p>
-                        <p className='flex gap-6 justify-between border-dashed border-b-2 border-gray-300'><span className='font-semibold'>Due: </span>{due}</p>
+                        <p className='flex gap-6 justify-between '><span className='font-semibold'>Subtotal:</span> {initialTotal} Tk</p>
+                        <p className='flex gap-6 justify-between'><span className='font-semibold '>Discount: </span>{data?.discount || 0} Tk</p>
+                        <p className='flex gap-6 justify-between '><span className='font-semibold'>Total: </span>{afterDiscount} Tk</p>
+                        <p className='flex gap-6 justify-between '><span className='font-semibold'>Paid: </span>{data?.paid} Tk</p>
+                        <p className='flex gap-6 justify-between '><span className='font-semibold'>Due: </span>{due} Tk</p>
                     </div>
 
 
@@ -111,19 +109,3 @@ const PrintInvoice = ({ print, setPrint, data }) => {
 };
 
 export default PrintInvoice;
-/**
-    *name 
-    phone
-    agent name
-    agent phone
-    items name
-    item rate
-    quantity
-    box number
-    carat
-    discount
-    paid
-    delivery
-    time
-    *
-    */

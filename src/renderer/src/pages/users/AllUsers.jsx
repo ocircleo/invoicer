@@ -1,11 +1,10 @@
-import { useContext } from "react";
-import { DataContext } from "../../utls/Provider";
 import UsersCard from "./UsersCard";
+import { useSelector } from "react-redux";
+
 
 
 const AllUsers = () => {
-    const { users } = useContext(DataContext)
-
+    const users = useSelector(state => state.users.users)
     return (
         <>
             <h3 className='text-2xl font-semibold mt-10'>All Users</h3>

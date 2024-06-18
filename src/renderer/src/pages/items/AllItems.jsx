@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { DataContext } from "../../utls/Provider";
+
+import { useSelector } from "react-redux";
 import SingleItem from "./SingleItem";
 
 
 const AllItems = () => {
-    const { items } = useContext(DataContext)
+const items = useSelector((state)=> state.items.items)
     return (
         <>
             <h3 className='text-2xl font-semibold mt-10'>All Items</h3>

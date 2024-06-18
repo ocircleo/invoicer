@@ -1,5 +1,5 @@
 import { AddItem, DeleteItem, GetItem, updateItem } from './Items'
-import { AddInvoice, DeleteInvoice, GetInvoice, updateInvoice } from './invoices'
+import { AddInvoice, DeleteInvoice, GetInvoice, GetTotalPages } from './invoices'
 import { AddUser, DeleteUser, GetUser, Login, updateUser } from './users'
 let index = 0
 export function apiRoutes(event, data, mainWindow) {
@@ -33,6 +33,9 @@ export function apiRoutes(event, data, mainWindow) {
       break
     case 'getInvoice':
       res = GetInvoice(args)
+      break
+    case 'getTotalPages':
+      res = GetTotalPages()
       break
     case 'addInvoice':
       res = AddInvoice(args)

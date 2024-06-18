@@ -1,8 +1,6 @@
 import {
-  ReadFile,
   ReadInvoiceFolder,
   ReadSingleInvoiceFile,
-  StatusMaintainer,
   WriteInvoiceFile,
   WriteInvoiceFolder
 } from './files'
@@ -12,10 +10,28 @@ export function GetInvoice(args) {
   let pageX = args.page * 25
   let num = Math.floor(pageX / 1000)
   let name = 'invoice' + num + '.json'
-  console.log(name, num)
   let { data } = ReadSingleInvoiceFile(name)
-  result = data.slice(pageX, 25)
+  result = data.slice(pageX, pageX + 25)
+  console.log('page: ', args.page, 'pagex: ', pageX, ' num: ', num, ' name: ', name)
   return { invoices: result }
+}
+export function GetTotalPages() {
+  console.log('entered function')
+  let invoicesFiles = ReadInvoiceFolder()
+  let length
+  if (invoicesFiles.length == 0) {
+    console.log('folder length 0: ', invoicesFiles)
+    length = 0
+  } else if (invoicesFiles.length == 1) {
+    let { data } = ReadSingleInvoiceFile(invoicesFiles[0])
+    length = data.length
+  } else {
+    console.log('folder length is not 1: ', invoicesFiles)
+    length = 1000 * (invoicesFiles.length - 1)
+    let { data } = ReadSingleInvoiceFile(invoicesFiles[invoicesFiles.length - 1])
+    length += data.length
+  }
+  return { length }
 }
 //tested for possible errors
 export function AddInvoice(args) {

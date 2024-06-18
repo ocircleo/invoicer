@@ -1,9 +1,9 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2'
-import { DataContext } from '../../utls/Provider';
-let memos = 0;
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateState } from "../../State/slice/updateSlice"
 const AddItem = () => {
-    const { refreshItem, update, setUpdate } = useContext(DataContext)
+    const update = useSelector((state) => state.update.status)
+    const dispatch = useDispatch()
     const api = window.electron.ipcRenderer;
     let formRef = useRef(null)
     // ===== Work of form ====
@@ -16,32 +16,11 @@ const AddItem = () => {
         const formData = { name, price, id: update.data.id }
         if (update.state && update.type == "item") {
             api.send("api", { path: { to: "updateItem", replyTo: "addItem" }, args: formData })
-
         } else {
             api.send("api", { path: { to: "addItem", replyTo: "addItem" }, args: formData })
         }
         form.reset()
     }
-    api.on("addItem", (e, data) => {
-        if (memos == data.resId) return;
-        memos = data.resId;
-        if (data.error) {
-            Swal.fire({
-                title: data.message,
-                icon: "error",
-            })
-        } else {
-            Swal.fire({
-                title: "Success full",
-                icon: "success"
-            }).then((result) => {
-                if (formRef.current) formRef.current.reset()
-                setUpdate({ type: "", data: {}, state: false })
-                refreshItem()
-            });
-        }
-    })
-
     useEffect(() => {
         if (update.state && update.type == "item") {
             if (formRef.current) {
@@ -66,7 +45,7 @@ const AddItem = () => {
                     <input type="number" name="price" id="price" placeholder="Enter Price" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                 </fieldset>
                 <fieldset className='grid grid-cols-2 gap-2 p-1 w-96'>
-                    <button onClick={() => setUpdate({ type: "", data: {}, state: false })} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
+                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
 
                     <button type="submit" className="bg-green-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Submit" : "Update"}</button>
                 </fieldset>

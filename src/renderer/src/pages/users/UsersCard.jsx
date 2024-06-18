@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { DataContext } from '../../utls/Provider';
+import { DataContext } from '../../utls/APIHANDELER';
+import { updateState } from '../../State/slice/updateSlice';
 const UsersCard = ({ args }) => {
-  
-    const { api, updateFunc } = useContext(DataContext)
+
+    const { api, dispatch } = useContext(DataContext)
 
     const updater = () => {
-        updateFunc({ type: "user", data: args, state: true });
+        dispatch(updateState({ type: "user", data: args, state: true }));
     }
     const deleter = () => {
         api.send("api", { path: { to: "deleteUser", replyTo: "getAllUser" }, args: args })

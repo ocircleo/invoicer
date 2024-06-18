@@ -1,22 +1,20 @@
-import React, { useContext, useEffect } from 'react';
-import { DataContext } from './Provider';
-let userMemo = -1;
-const UsersData = () => {
-    let { api, setUsers, refreshUser } = useContext(DataContext)
-    api.on("getAllUser", (e, data) => {
-        if (userMemo == data.resId) return;
-        userMemo = data.resId;
-        setUsers(data.data);
+// import { useEffect } from 'react';
+// let userMemo = -1;
+// const UsersData = () => {
+//     api.on("getAllUser", (e, data) => {
+//         if (userMemo == data.resId) return;
+//         userMemo = data.resId;
+//         setUsers(data.data);
 
-    })
-    useEffect(() => {
-        refreshUser()
-    }, [])
-    return (
-        <div>
+//     })
+//     useEffect(() => {
+//         refreshUser()
+//     }, [])
+//     return (
+//         <div>
 
-        </div>
-    );
-};
+//         </div>
+//     );
+// };
 
-export default UsersData;
+// export default UsersData;

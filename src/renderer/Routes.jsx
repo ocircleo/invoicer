@@ -9,7 +9,7 @@ import NewInvoice from "./src/pages/newInvoice/NewInvoice";
 import Invoices from "./src/pages/invoices/Invoices";
 import Users from "./src/pages/users/Users";
 import Error from "./src/Error";
-import StoreInfo from "./src/pages/store/StoreInfo";
+// import StoreInfo from "./src/pages/store/StoreInfo";
 
 const router = createHashRouter([
     {
@@ -24,7 +24,7 @@ const router = createHashRouter([
             path: "items",
             element: <Items></Items>
 
-        }, {
+        },{
             path: "about",
             element: <About></About>
         }, {
@@ -37,14 +37,15 @@ const router = createHashRouter([
         }, {
             path: "users",
             element: <Users></Users>
-        }, {
+        }, /*{
             path: "storeInfo",
             element: <StoreInfo></StoreInfo>
-        }
+        }*/
         ],
     }, {
         path: "login",
         element: <Login />
     }
+
 ])
 export { router }
