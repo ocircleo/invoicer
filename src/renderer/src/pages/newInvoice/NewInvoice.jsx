@@ -315,7 +315,7 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="phone" required={true} className='font-semibold text-lg'>phone</label>
-                        <input type="number" name="phone" id="phone" placeholder="Enter Price" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="number" name="phone" id="phone" placeholder="Enter Phone" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="address" className='font-semibold text-lg'>address</label>
