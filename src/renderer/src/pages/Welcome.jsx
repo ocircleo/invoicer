@@ -1,7 +1,12 @@
+import Graph from "./stats/Graph";
+import Statistics from "./stats/Statistics";
+
 const Welcome = () => {
     return (
         <div>
-            <h1 className='text-xl text-center font-semibold relative'>Welcome User <span  className='h-full w-full bg-red-300 absolute left-0  translate-x-full duration-500'></span> </h1>
+            <h1 className='text-2xl py-3 text-center font-semibold relative bg-white'>Welcome User </h1>
+            <Statistics></Statistics>
+            <Graph></Graph>
         </div>
     );
 };

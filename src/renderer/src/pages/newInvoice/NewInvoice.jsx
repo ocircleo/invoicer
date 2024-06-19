@@ -5,16 +5,71 @@ import { useSelector } from "react-redux";
 
 const NewInvoice = () => {
     const { api } = useContext(DataContext)
-    const users = useSelector((state)=> state.users.users)
-    const items = useSelector((state)=> state.items.items)
+    const users = useSelector((state) => state.users.users)
+    const items = useSelector((state) => state.items.items)
     const [print, setPrint] = useState(false)
     const [data, setData] = useState({})
     const [calc, setCalc] = useState({ subtotal: 0, discount: 0, total: 0, paid: 0, due: 0 })
     let formRef = useRef(null)
     let summeryRef = useRef(null)
     let fieldRef = useRef(null)
+    const date = new Date()
+    let today, day, month, year;
+    year = date.getFullYear();
+    month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth()
+    day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    today = `${year}-${month}-${day}`
+    console.log(today);
     const saveToDB = (data) => {
         api.send("api", { path: { to: "addInvoice", replyTo: null }, args: data })
+    }
+    const submitFrom = (e) => {
+        e.preventDefault();
+        let form = e.target;
+        let id, name, phone, agentName, agentPhone, shopName, boxNumber, discount, paid, delivery, address, items = [];
+        id = form.userId.value;
+        name = form.name.value;
+        phone = form.phone.value;
+        agentName = form.agentName.value;
+        agentPhone = form.agentPhone.value;
+        shopName = form.shopName.value;
+        boxNumber = form.box.value;
+        discount = form.discount.value;
+        paid = form.paid.value;
+        delivery = form.delivery.value;
+        address = form.address.value;
+        let invoiceData = { id, name, phone, agentName, agentPhone, shopName, boxNumber, discount, paid, delivery, address, items }
+        let field = document.getElementById("field")
+        let childElements = field.children;
+        let count = 0;
+        let item = {}
+        for (let i = 0; i <= childElements.length; i++) {
+            if (count == 5) {
+                items.push(item)
+                count = 0;
+                item = {}
+            }
+            if (childElements.length == i) continue;
+            switch (count) {
+                case 0: item.name = childElements[i].children[1].value;
+                    break
+                case 1: item.price = childElements[i].children[1].value;
+                    break
+                case 2: item.weight = childElements[i].children[1].value;
+                    break
+                case 3: item.carat = childElements[i].children[1].value;
+                    break
+                case 4: item.quantity = childElements[i].children[1].value;
+                    break
+            }
+            count++;
+        }
+        let date = new Date();
+        invoiceData.year = date.getFullYear(), invoiceData.month = date.getMonth(), invoiceData.day = date.getDate(), invoiceData.minutes = date.getMinutes(), invoiceData.hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours(), invoiceData.timeType = date.getHours() > 12 ? "PM" : "AM";
+        console.log(invoiceData);
+        saveToDB(invoiceData);
+        setData(invoiceData)
+        setPrint(true)
     }
     const calculate = (e) => {
         if (formRef.current) {
@@ -28,7 +83,7 @@ const NewInvoice = () => {
             let count = 0;
             let item = {}
             for (let i = 0; i <= childElements.length; i++) {
-                if (count == 4) {
+                if (count == 5) {
                     items.push(item)
                     count = 0;
                     item = {}
@@ -41,11 +96,14 @@ const NewInvoice = () => {
                         break
                     case 2: item.weight = childElements[i].children[1].value;
                         break
-                    case 3: item.quantity = childElements[i].children[1].value;
+                    case 3: item.carat = childElements[i].children[1].value;
+                        break
+                    case 4: item.quantity = childElements[i].children[1].value;
                         break
                 }
                 count++;
             }
+            console.log(items);
             let initialTotal = 0;
             items.map(ele => {
                 let { price, quantity } = ele;
@@ -57,58 +115,14 @@ const NewInvoice = () => {
             setCalc({ subtotal: initialTotal, discount: discount, total: afterDiscount, paid: paid, due: due })
         }
     }
-    const submitFrom = (e) => {
-        e.preventDefault();
-        let form = e.target;
-        let name, phone, agentName, agentPhone, boxNumber, caret, discount, paid, delivery, address, items = [];
-        name = form.name.value;
-        phone = form.phone.value;
-        agentName = form.agentName.value;
-        agentPhone = form.agentPhone.value;
-        boxNumber = form.box.value;
-        caret = form.caret.value;
-        discount = form.discount.value;
-        paid = form.paid.value;
-        delivery = form.delivery.value;
-        address = form.address.value;
-        let invoiceData = { name, phone, agentName, agentPhone, boxNumber, caret, discount, paid, delivery, address, items }
-        let field = document.getElementById("field")
-        let childElements = field.children;
-        let count = 0;
-        let item = {}
-        for (let i = 0; i <= childElements.length; i++) {
-            if (count == 4) {
-                items.push(item)
-                count = 0;
-                item = {}
-            }
-            if (childElements.length == i) continue;
-            switch (count) {
-                case 0: item.name = childElements[i].children[1].value;
-                    break
-                case 1: item.price = childElements[i].children[1].value;
-                    break
-                case 2: item.weight = childElements[i].children[1].value;
-                    break
-                case 3: item.quantity = childElements[i].children[1].value;
-                    break
-            }
-            count++;
-        }
-        let date = new Date();
-        invoiceData.year = date.getFullYear(), invoiceData.month = date.getMonth(), invoiceData.day = date.getDate(), invoiceData.minutes = date.getMinutes(), invoiceData.hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours(), invoiceData.timeType = date.getHours() > 12 ? "PM" : "AM";
-        console.table(invoiceData);
-        saveToDB(invoiceData);
-        setData(invoiceData)
-        setPrint(true)
-
-    }
     const fillInfo = (e, data) => {
         let target = e.target;
-        let name, phone, address;
+        let id, name, phone, address;
+        id = document.getElementById("userId")
         name = document.getElementById("name")
         phone = document.getElementById("phone")
         address = document.getElementById("address")
+        id.value = data.id
         name.value = data.name;
         phone.value = data.phone;
         address.value = data.address;
@@ -138,6 +152,67 @@ const NewInvoice = () => {
             <p> ${ele.address}</p>
             `
             div.addEventListener("click", e => fillInfo(e, ele))
+            parentDiv.appendChild(div)
+
+        })
+    }
+    const userInfoFillById = (e) => {
+        let target = e.target;
+        let parentDiv = e.target.parentElement.children[2];
+        let text = target.value;
+        let result = users.filter(ele => {
+            return ele.id.toLowerCase().includes(text.toLowerCase())
+        })
+        if (!parentDiv.classList.contains("fill-active")) {
+            parentDiv.classList.add("fill-active");
+        }
+        parentDiv.innerHTML = ""
+        result.forEach(ele => {
+            let div = document.createElement("div")
+            div.classList.add("flex", "justify-evenly", "bg-white", "border", "border-blue-400", "py-1", "cursor-pointer", "duration-100", "active:scale-95", "fill", "z-10");
+            div.innerHTML = `
+            <p> ${ele.id}</p>
+            <p> ${ele.name}</p>
+            `
+            div.addEventListener("click", e => fillInfo(e, ele))
+            parentDiv.appendChild(div)
+
+        })
+    }
+    const fillAgentInfo = (e, data) => {
+        let target = e.target;
+        let agentName, agentPhone, shopName;
+        agentName = document.getElementById("agentName")
+        agentPhone = document.getElementById("agentPhone")
+        shopName = document.getElementById("shopName")
+        agentName.value = data.name;
+        agentPhone.value = data.phone;
+        shopName.value = data.shopName;
+        if (target.classList.contains("fill")) {
+            target.parentElement.innerHTML = "";
+        } else if (target.parentElement.classList.contains("fill")) {
+            target.parentElement.parentElement.innerHTML = ""
+        }
+    }
+    const agentAutoFill = (e) => {
+        let target = e.target;
+        let parentDiv = e.target.parentElement.children[2];
+        let text = target.value;
+        let result = users.filter(ele => {
+            return (ele.name.toLowerCase().includes(text.toLowerCase()) || ele.id == text.toLowerCase()) && ele.role == "agent";
+        })
+        if (!parentDiv.classList.contains("fill-active")) {
+            parentDiv.classList.add("fill-active");
+        }
+        parentDiv.innerHTML = ""
+        result.forEach(ele => {
+            let div = document.createElement("div")
+            div.classList.add("flex", "justify-evenly", "bg-white", "border", "border-blue-400", "py-1", "cursor-pointer", "duration-100", "active:scale-95", "fill", "z-10");
+            div.innerHTML = `
+            <p> ${ele.name}</p>
+            <p> ${ele.shopName}</p>
+            `
+            div.addEventListener("click", e => fillAgentInfo(e, ele))
             parentDiv.appendChild(div)
 
         })
@@ -244,6 +319,11 @@ const NewInvoice = () => {
                 input.defaultValue = 1;
                 break;
             }
+            case "carat": {
+                fieldSet.classList.add("flex", "flex-col", "gap-2", "p-1", "col-span-5", "md:col-span-2", "lg:col-span-1")
+                input.defaultValue = 22;
+                break;
+            }
             case "quantity": {
                 fieldSet.classList.add("flex", "flex-col", "gap-2", "p-1", "col-span-5", "md:col-span-1", "relative")
                 input.defaultValue = 1;
@@ -265,15 +345,18 @@ const NewInvoice = () => {
             let price = makeField("number", "price", "Enter price", "Price");
             let weight = makeField("text", "weight", "Enter Weight", "weight");
             let quantity = makeField("number", "quantity", "Enter Quantity", "Quantity");
+            let carat = makeField("number", "carat", "Enter Carat", "Carat");
             name.classList.add(id)
             price.classList.add(id)
             weight.classList.add(id)
             quantity.classList.add(id)
+            carat.classList.add(id)
             name.setAttribute("data-id", id);
             quantity.setAttribute("data-id", id);
             div.appendChild(name)
             div.appendChild(price)
             div.appendChild(weight)
+            div.appendChild(carat)
             div.appendChild(quantity)
         }
     }
@@ -281,7 +364,7 @@ const NewInvoice = () => {
         <div onClick={handelClick} className="bg-gray-100">
             <h1 className='text-xl font-bold text-center py-5' id='top'>Create New Invoice</h1>
             <form ref={formRef} onSubmit={submitFrom} className='flex flex-col justify-center items-center'>
-                <div id="field" ref={fieldRef} className="grid grid-cols-5 gap-2 w-full px-12 items-center ">
+                <div id="field" ref={fieldRef} className="grid grid-cols-6 gap-2 w-full px-12 items-center ">
                     <fieldset className='flex flex-col gap-2 p-1  col-span-5 lg:col-span-2 relative 1234' data-id="1234">
                         <label htmlFor="item" className='font-semibold text-lg' >Item name</label>
                         <input type="text" required={true} name="item" placeholder="Enter new item name" onChange={autoFill} className='w-full p-2 rounded group border-b-2 outline-none border-blue-500 ' />
@@ -296,7 +379,11 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-2 lg:col-span-1'>
                         <label htmlFor="weight" className='font-semibold text-lg'>Weight</label>
-                        <input type="text" required={true} defaultValue={1} name="weight" placeholder="Enter Weight" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="number" required={true} defaultValue={1} name="weight" placeholder="Enter Weight" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    </fieldset>
+                    <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-2 lg:col-span-1'>
+                        <label htmlFor="carat" className='font-semibold text-lg'>Carat</label>
+                        <input type="number" required={true} defaultValue={22} name="carat" placeholder="Enter Carat" className='w-full  p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 col-span-5 md:col-span-1'>
                         <label htmlFor="quantity" className='font-semibold text-lg'>Quantity</label>
@@ -306,6 +393,13 @@ const NewInvoice = () => {
                 <button onClick={addField} type="button" className="text-white bg-blue-500 px-4 py-2 font-semibold rounded mt-3 duration-100 active:scale-90">Add Item</button>
                 <div className="flex  gap-1 shrink flex-wrap  justify-center items-center capitalize">
 
+                    <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
+                        <label htmlFor="userId" className='font-semibold text-lg'>User Id</label>
+                        <input onChange={userInfoFillById} type="text" required={true} name="userId" id="userId" placeholder="Enter User Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
+
+                        </div>
+                    </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
                         <label htmlFor="name" className='font-semibold text-lg'> name</label>
                         <input onChange={userInfoFill} type="text" required={true} name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
@@ -321,25 +415,28 @@ const NewInvoice = () => {
                         <label htmlFor="address" className='font-semibold text-lg'>address</label>
                         <input type="text" name="address" id="address" placeholder="Enter address" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
-                    <fieldset className='flex flex-col gap-2 p-1 w-96'>
-                        <label htmlFor="agentName" className='font-semibold text-lg'>agent name</label>
-                        <input type="text" name="agentName" id="agentName" placeholder="Enter agentName" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
+                        <label htmlFor="agentName" className='font-semibold text-lg'>agent name or id</label>
+                        <input type="text" name="agentName" onChange={agentAutoFill} id="agentName" placeholder="Enter Agent Name or Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
+
+                        </div>
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="agentPhone" className='font-semibold text-lg'>Agent phone</label>
                         <input type="number" name="agentPhone" id="agentPhone" placeholder="Enter agent Phone" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
-                        <label htmlFor="delivery" className='font-semibold text-lg'>delivery Date</label>
-                        <input type="date" required={true} name="delivery" id="delivery" placeholder="Delivery date" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <label htmlFor="shopName" className='font-semibold text-lg'>Agent shop Name</label>
+                        <input type="text" name="shopName" id="shopName" placeholder="Enter agent shop name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    </fieldset>
+                    <fieldset className='flex flex-col gap-2 p-1 w-96'>
+                        <label htmlFor="delivery" className='font-semibold text-lg'>Delivery Date</label>
+                        <input type="date" required={true} defaultValue={today} name="delivery" id="delivery" placeholder="Delivery date" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="box" className='font-semibold text-lg'>box number</label>
                         <input type="text" name="box" id="box" placeholder="Enter box number" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
-                    </fieldset>
-                    <fieldset className='flex flex-col gap-2 p-1 w-96'>
-                        <label htmlFor="caret" className='font-semibold text-lg'>caret</label>
-                        <input type="number" name="caret" id="caret" placeholder="Enter caret" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="paid" className='font-semibold text-lg'>paid</label>
@@ -347,7 +444,7 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96'>
                         <label htmlFor="discount" className='font-semibold text-lg'>discount</label>
-                        <input type="text" name="discount" defaultValue={0} id="discount" placeholder="Enter discount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="number" name="discount" id="discount" placeholder="Enter discount" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                     </fieldset>
                 </div>
                 <div className="flex gap-2 flex-shrink flex-wrap items-center justify-center mt-12">

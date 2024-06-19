@@ -11,15 +11,18 @@ const NewUser = () => {
     // ===== Work of form ====
     const submitFrom = (e) => {
         e.preventDefault()
-        let form, name, phone, address, email, password, role;
+        let form, id, name, phone, address, shopName, password, role;
         form = e.target;
+        id = form.id.value;
+        console.log(id);
         name = form.name.value;
         phone = form.phone.value;
         address = form.address.value;
-        email = form.email.value;
+        shopName = form.shopName.value;
         role = form.role.value;
         password = form.password.value;
-        const formData = { name, phone, address, email, id: update.data.id, role, password }
+        const formData = { id, name, phone, address, shopName, role, password }
+        console.log(formData);
         if (update.state && update.type == "user") {
             api.send("api", { path: { to: "updateUser", replyTo: "getAllUser" }, args: formData })
 
@@ -33,24 +36,26 @@ const NewUser = () => {
     }
     function inputChange(e) {
         let target = e.target.value;
-        if (target == "user") return setAdmin(false);
+        if (target == "user" || target == "agent") return setAdmin(false);
         return setAdmin(true);
 
     }
     useEffect(() => {
         if (update.state && update.type == "user") {
             if (formRef.current) {
-                let name, phone, address, email, role, password;
+                let id, name, phone, address, shopName, role, password;
+                id = formRef.current.id
                 name = formRef.current.name;
                 phone = formRef.current.phone;
                 address = formRef.current.address;
-                email = formRef.current.email;
+                shopName = formRef.current.shopName;
                 role = formRef.current.role;
                 password = formRef.current.password;
+                id.value = update.data.id;
                 name.value = update.data.name;
                 phone.value = update.data.phone;
                 address.value = update.data.address;
-                email.value = update.data.email;
+                shopName.value = update.data.shopName;
                 role.value = update.data?.role || "";
                 password.value = update.data?.password || "";
                 if (update.data.role == "admin") setAdmin(true);
@@ -64,8 +69,12 @@ const NewUser = () => {
             <form ref={formRef} onSubmit={submitFrom} className=' flex flex-shrink-0 flex-wrap gap-1 items-center flex-col'>
                 <p className={`${update ? "block" : "hidden"} text-gray-600 text-sm font-semibold self-start`}>{update.type == "user" ? "updating: " + update.data?.name + ", id: " + update.data?.id : ""}</p>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
+                    <label htmlFor="id" className='font-semibold text-lg'>User ID</label>
+                    <input type="text" name="id" id="id" placeholder="Enter ID" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' required/>
+                </fieldset>
+                <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="name" className='font-semibold text-lg'>User name</label>
-                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' required/>
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="phone" className='font-semibold text-lg'>Phone Number</label>
@@ -76,13 +85,14 @@ const NewUser = () => {
                     <input type="text" name="address" id="address" placeholder="Enter Address" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
-                    <label htmlFor="email" className='font-semibold text-lg'>Email</label>
-                    <input type="email" name="email" id="email" placeholder="Enter Email" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <label htmlFor="shopeName" className='font-semibold text-lg'>Shop Name</label>
+                    <input type="text" name="shopName" id="shopName" placeholder="Enter Shop Name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="role" className='font-semibold text-lg'>User Type</label>
                     <select onChange={inputChange} name="role" id="role" className='p-2 rounded cursor-pointer'>
                         <option value="user" className='p-2'>User</option>
+                        <option value="agent" className='p-2 cursor-pointer'>Agent</option>
                         <option value="admin" className='p-2 cursor-pointer'>Admin</option>
                     </select>
                 </fieldset>

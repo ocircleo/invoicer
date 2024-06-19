@@ -18,7 +18,10 @@ export function GetUser(args) {
 export function AddUser(args) {
   const status = ReadFile('users.json')
   let data = status.data || []
-  args.id = data.length
+  let copy = data.filter((ele) => ele.id == args.id)
+  if (copy.length > 1) {
+    return { error: true, message: 'User id already exists', data: data }
+  }
   data.push(args)
   return WriteFile('users.json', data)
 }

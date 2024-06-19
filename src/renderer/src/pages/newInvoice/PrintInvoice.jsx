@@ -33,7 +33,7 @@ const PrintInvoice = ({ print, setPrint, data }) => {
     })
     let afterDiscount = initialTotal - Number(data?.discount) || 0;
     let due = afterDiscount - Number(data?.paid) || 0;
-    let delivery = data?.delivery?.split("-") || [0,0,0];
+    let delivery = data?.delivery?.split("-") || [0, 0, 0];
     let month = months[Number(delivery[1])] || 1
     return (
         <div className={`${print ? "block" : "hidden"} fixed h-full w-screen bg-white  top-0 left-0 z-50  pt-20`}>
@@ -42,34 +42,39 @@ const PrintInvoice = ({ print, setPrint, data }) => {
                 <div className='flex justify-between items-start'>
                     <div>
                         <p className='font-semibold text-lg '>Customer Profile</p>
-                        <p>Customer-ID: 0</p>
+                        <p>Customer ID: {data?.id || "N/A"}</p>
                         <p className=''> <span className=''>Name:</span> {data?.name}</p>
                         <p><span className=''>Phone:</span> {data?.phone}</p>
                         <p><span className=''>Address:</span> {data?.address}</p>
+                     
 
                     </div>
                     <div>
                         <p><span className=''>Box No:</span> {data?.boxNumber || "N/A"}</p>
                         <p><span className=''>Agent Name:</span> {data?.agentName}</p>
+                        <p><span className=''>Shop Name:</span> {data?.shopName}</p>
+
                         <p><span className=''>Delivery Date:</span> {delivery[2] + " " + month + " " + delivery[0]}</p>
 
                     </div>
                 </div>
 
                 <div>
-                    <div className='grid grid-cols-6 mt-4 px-2 border-2 border-black  text-center'>
+                    <div className='grid grid-cols-7 mt-4 px-2 border-2 border-black  text-center'>
                         <p className='font-semibold border-r-2 py-2 border-black'>SL No:</p>
                         <p className='font-semibold  col-span-2 border-r-2 py-2 border-black'>Name</p>
                         <p className='font-semibold border-r-2 py-2 border-black'>Price</p>
-                        <p className='font-semibold border-r-2 py-2 border-black'>weight</p>
+                        <p className='font-semibold border-r-2 py-2 border-black'>Weight</p>
+                        <p className='font-semibold border-r-2 py-2 border-black'>Carat</p>
                         <p className='font-semibold py-2'>Quantity</p>
                     </div>
                     {
-                        newItems.map((ele, index) => <div key={ele.index} className='border-t-0 border-2  border-black  grid grid-cols-6 px-2 '>
+                        newItems.map((ele, index) => <div key={ele.index} className='border-t-0 border-2  border-black  grid grid-cols-7 px-2 '>
                             <p className='col-span-1 text-center border-r-2 py-2 border-black'>{index + 1}</p>
                             <p className='col-span-2 border-r-2 py-2 border-black text-center'>{ele?.name}</p>
                             <p className='border-r-2 py-2 border-black text-center'>{ele?.price}</p>
-                            <p className='border-r-2 py-2 border-black text-center'>{ele?.weight}</p>
+                            <p className='border-r-2 py-2 border-black text-center'>{ele?.weight} gm</p>
+                            <p className='border-r-2 py-2 border-black text-center'>{ele?.carat} k</p>
                             <p className='py-2 text-center'>{ele?.quantity}</p>
                         </div>)
                     }
