@@ -19,12 +19,17 @@ const NewInvoice = () => {
     month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth()
     day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     today = `${year}-${month}-${day}`
-    console.log(today);
-    const saveToDB = (data) => {
+
+    const saveToDB = (data, statsData) => {
+        console.log(statsData);
         api.send("api", { path: { to: "addInvoice", replyTo: null }, args: data })
+        api.send("api", { path: { to: "updateStats", replyTo: null }, args: { xData: statsData } })
     }
+
+
     const submitFrom = (e) => {
         e.preventDefault();
+        let statsData = []
         let form = e.target;
         let id, name, phone, agentName, agentPhone, shopName, boxNumber, discount, paid, delivery, address, items = [];
         id = form.userId.value;
@@ -64,10 +69,39 @@ const NewInvoice = () => {
             }
             count++;
         }
-        let date = new Date();
+
+        let initialTotal = 0;
+        let totalQuantity = 0;
+        let overallDiscount = 0;
+        let due = 0;
+        items.map(ele => {
+            let { price, quantity } = ele;
+            totalQuantity += Number(quantity)
+            let sub = Number(price) * Number(quantity);
+            initialTotal += sub;
+        })
+        overallDiscount = Number(discount) / totalQuantity;
+
+        invoiceData.income = initialTotal - Number(discount)
+        console.log(initialTotal);
+        due = (initialTotal - Number(discount) - Number(paid)) / totalQuantity
+        items.map(ele => {
+            for (let i = 0; i < Number(ele.quantity); i++) {
+                let dataTemplate = {
+                    day: date.getDate(),
+                    month: date.getMonth(),
+                    year: date.getFullYear(),
+                    item: ele.name,
+                    income: Number(ele.price),
+                    discount: overallDiscount,
+                    due: due
+                }
+                statsData.push(dataTemplate)
+            }
+        })
         invoiceData.year = date.getFullYear(), invoiceData.month = date.getMonth(), invoiceData.day = date.getDate(), invoiceData.minutes = date.getMinutes(), invoiceData.hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours(), invoiceData.timeType = date.getHours() > 12 ? "PM" : "AM";
         console.log(invoiceData);
-        saveToDB(invoiceData);
+        saveToDB(invoiceData, statsData);
         setData(invoiceData)
         setPrint(true)
     }
@@ -103,14 +137,16 @@ const NewInvoice = () => {
                 }
                 count++;
             }
-            console.log(items);
+
             let initialTotal = 0;
             items.map(ele => {
+
                 let { price, quantity } = ele;
                 let sub = Number(price) * Number(quantity);
                 initialTotal += sub;
             })
             let afterDiscount = initialTotal - Number(discount) || 0;
+            console.log(afterDiscount);
             let due = afterDiscount - Number(paid) || 0;
             setCalc({ subtotal: initialTotal, discount: discount, total: afterDiscount, paid: paid, due: due })
         }
@@ -367,7 +403,7 @@ const NewInvoice = () => {
                 <div id="field" ref={fieldRef} className="grid grid-cols-6 gap-2 w-full px-12 items-center ">
                     <fieldset className='flex flex-col gap-2 p-1  col-span-5 lg:col-span-2 relative 1234' data-id="1234">
                         <label htmlFor="item" className='font-semibold text-lg' >Item name</label>
-                        <input type="text" required={true} name="item" placeholder="Enter new item name" onChange={autoFill} className='w-full p-2 rounded group border-b-2 outline-none border-blue-500 ' />
+                        <input type="text" required={true} name="item" placeholder="Enter new item name" onKeyUp={autoFill} className='w-full p-2 rounded group border-b-2 outline-none border-blue-500 ' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
@@ -467,7 +503,7 @@ const NewInvoice = () => {
                 <div ref={summeryRef} className="flex flex-wrap justify-center gap-5 text-xl   bg-white border-t-2  hover:-skew-x-12 hover:scale-110 duration-100 p-3 ">
                     <p><span className='font-semibold'>Subtotal:</span> {calc?.subtotal || 0} Tk</p>
                     <p><span className='font-semibold'>Discount: </span>{calc?.discount || 0} Tk</p>
-                    <p><span className='font-semibold'>Total: </span>{calc?.paid || 0} Tk</p>
+                    <p><span className='font-semibold'>Total: </span>{calc?.total || 0} Tk</p>
                     <p><span className='font-semibold'>Paid: </span>{calc?.paid || 0} Tk</p>
                     <p><span className='font-semibold'>Due: </span>{calc?.due || 0} Tk</p>
                 </div>

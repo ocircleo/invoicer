@@ -1,9 +1,4 @@
-import {
-  ReadInvoiceFolder,
-  ReadSingleInvoiceFile,
-  WriteInvoiceFile,
-  WriteInvoiceFolder
-} from './files'
+import { ReadFolder, ReadSingleInvoiceFile, WriteInvoiceFile, WriteFolder } from './files'
 //tested
 export function GetInvoice(args) {
   let result = []
@@ -17,7 +12,7 @@ export function GetInvoice(args) {
 }
 export function GetTotalPages() {
   console.log('entered function')
-  let invoicesFiles = ReadInvoiceFolder()
+  let invoicesFiles = ReadFolder('invoices')
   let length
   if (invoicesFiles.length == 0) {
     console.log('folder length 0: ', invoicesFiles)
@@ -35,7 +30,7 @@ export function GetTotalPages() {
 }
 //tested for possible errors
 export function AddInvoice(args) {
-  let invoiceFileList = ReadInvoiceFolder()
+  let invoiceFileList = ReadFolder('invoices')
   if (invoiceFileList.length > 1) {
     //tested
     let { data } = ReadSingleInvoiceFile(invoiceFileList[invoiceFileList.length - 1])
@@ -66,13 +61,14 @@ export function AddInvoice(args) {
     }
   } else {
     //tested
-    let { error } = WriteInvoiceFolder('invoices')
+    let { error } = WriteFolder('invoices')
     if (!error) {
       args.id = 0
       return WriteInvoiceFile('invoice0.json', [args])
     }
   }
 }
+
 export function DeleteInvoice(para) {
   console.log('delete Invoice')
 }

@@ -1,5 +1,11 @@
 import { AddItem, DeleteItem, GetItem, updateItem } from './Items'
 import { AddInvoice, DeleteInvoice, GetInvoice, GetTotalPages } from './invoices'
+import {
+  ReadStatistics,
+  ReadStatisticsItems,
+  readStatsAll,
+  updateStatisticsAll
+} from './statistics'
 import { AddUser, DeleteUser, GetUser, Login, updateUser } from './users'
 let index = 0
 export function apiRoutes(event, data, mainWindow) {
@@ -42,6 +48,12 @@ export function apiRoutes(event, data, mainWindow) {
       break
     case 'deleteInvoice':
       res = DeleteInvoice(args)
+      break
+    case 'updateStats':
+      res = updateStatisticsAll(args)
+      break
+    case 'readStatsAll':
+      res = readStatsAll(args)
       break
     case 'login':
       res = Login(args)

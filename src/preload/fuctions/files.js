@@ -29,7 +29,7 @@ export function WriteFile(name, data) {
     return status
   }
 }
-export function WriteInvoiceFolder(name) {
+export function WriteFolder(name) {
   let status = { error: false, message: 'Folder ready' }
   try {
     fs.mkdirSync(filePath(name), { recursive: true })
@@ -41,13 +41,13 @@ export function WriteInvoiceFolder(name) {
     return status
   }
 }
-export function ReadInvoiceFolder() {
+export function ReadFolder(name) {
   try {
-    return fs.readdirSync(filePath('invoices'), 'utf-8')
+    return fs.readdirSync(filePath(name), 'utf-8')
   } catch (error) {
     console.log(error)
     return []
-  }
+  } 
 }
 export function ReadSingleInvoiceFile(name) {
   let status = { error: false, message: 'File ready', data: [] }
@@ -74,37 +74,3 @@ export function WriteInvoiceFile(name, data) {
     return status
   }
 }
-//Excess code not necessary
-// export function StatusMaintainer(callBack, args) {
-//   let template = {
-//     invoiceList: [],
-//     date: Date.now(),
-//     soldToday: []
-//   }
-//   let currentStatus = ReadFile('status.json')
-//   if (currentStatus.error) {
-//     try {
-//       let files = ReadInvoiceFolder()
-//       if (files.length == 0) {
-//         //passed
-//         template.invoiceList.push('invoice0.json')
-//         WriteFile('status.json', template)
-//         fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
-//       } else {
-//         //passed
-//         files.forEach((ele) => template.invoiceList.push(ele))
-//         WriteFile('status.json', template)
-//       }
-//     } catch (error) {
-//       //passed
-//       fs.mkdirSync(filePath('invoices'), { recursive: true })
-//       fs.writeFileSync(path.join(app.getPath('documents'), 'invoices', 'invoice0.json'), '[]')
-//       template.invoiceList.push('invoice0.json')
-//       WriteFile('status.json', template)
-//     } finally {
-//       callBack(args)
-//     }
-//   } else {
-//     callBack(args)
-//   }
-// }

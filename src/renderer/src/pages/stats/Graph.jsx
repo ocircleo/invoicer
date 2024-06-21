@@ -1,46 +1,14 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-const data = [];
-
-for (let i = 0; i < 31; i++) {
-    let xx = {
-        name: i + 1,
-        uv: 14000,
-        pv: 12400,
-        amt: 2400,
-    }
-    data.push(xx)
-}
-const getIntroOfPage = (label) => {
-    if (label === 'Page A') {
-        return "Page A is about men's clothing";
-    }
-    if (label === 'Page B') {
-        return "Page B is about women's dress";
-    }
-    if (label === 'Page C') {
-        return "Page C is about women's bag";
-    }
-    if (label === 'Page D') {
-        return 'Page D is about household goods';
-    }
-    if (label === 'Page E') {
-        return 'Page E is about food';
-    }
-    if (label === 'Page F') {
-        return 'Page F is about baby food';
-    }
-    return '';
-};
+import { DataContext } from '../../utls/APIHANDELER';
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
             <div className="custom-tooltip">
                 <p className="label">{`May-${label} : Income: ${payload[0].value} TK`}</p>
-                <p className="intro">{getIntroOfPage(label)}</p>
-                <p className="desc">Anything you want can be displayed here.</p>
+                <p className='label'>{`Discount: ${payload[0]?.payload?.discount} TK, Due: ${payload[0]?.payload?.due} TK`}</p>
             </div>
         );
     }
@@ -61,26 +29,38 @@ let monthInText = ["January",
     "October",
     "November",
     "December"]
+
 const Graph = () => {
+    const formRef = useRef(null)
+    const { readStatsAll } = useContext(DataContext)
+    const { everyDayStats } = useSelector((state) => state.stats)
+    const change = (e) => {
+        if (formRef.current) {
+            let yearValue = formRef.current.year.value
+            let monthValue = formRef.current.month.value
+            console.log(yearValue, monthValue);
+            readStatsAll({ day: null, month: monthValue, year: yearValue, replyTo: "readStatsAll" })
+        }
+    }
     return (
         <div className='bg-white w-full p-5 h-[30rem]' >
             <div className='py-4 flex  justify-between  border px-2 mb-5'>
                 <p className='text-lg'>Monthly Stats Graph</p>
                 <div>
-                    <form onSubmit={(e) => e.preventDefault()} className='flex gap-3 flex-col md:flex-row' >
+                    <form onSubmit={(e) => e.preventDefault()} ref={formRef} className='flex gap-3 flex-col md:flex-row' >
                         <fieldset className='flex gap-3 bg-white'>
                             <label htmlFor="year">Select Year</label>
-                            <select name="year" id="year" className='px-3 border w-36'>
+                            <select name="year" id="year" className='px-3 border w-36' onChange={change} >
                                 {
-                                    year.map(ele => <option value={`202${ele + 23}`}>{`20${ele + 24}`}</option>)
+                                    year.map((ele, index) => <option key={index} value={`20${ele + 24}`}>{`20${ele + 24}`}</option>)
                                 }
                             </select>
                         </fieldset>
                         <fieldset className='flex gap-3 bg-white'>
                             <label htmlFor="month">Select Month</label>
-                            <select name="month" id="month" className='px-3 border w-36'>
+                            <select name="month" id="month" className='px-3 border w-36' onChange={change}>
                                 {
-                                    month.map(ele => <option value={`${ele}`}>{monthInText[ele]}</option>)
+                                    month.map((ele, index) => <option key={index} value={`${ele}`}>{monthInText[ele]}</option>)
                                 }
                             </select>
                         </fieldset>
@@ -91,7 +71,7 @@ const Graph = () => {
                 <BarChart
                     width={500}
                     height={300}
-                    data={data}
+                    data={everyDayStats}
                     margin={{
                         top: 5,
                         right: 30,
@@ -101,10 +81,10 @@ const Graph = () => {
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="Month" />
-                    <YAxis dataKey="Income"/>
+                    <YAxis />
                     <Tooltip content={<CustomTooltip />} />
                     <Legend />
-                    <Bar dataKey="pv" barSize={20} fill="#8884d8" />
+                    <Bar dataKey="income" barSize={20} fill="#8884d8" />
                 </BarChart>
             </ResponsiveContainer>
         </div>
