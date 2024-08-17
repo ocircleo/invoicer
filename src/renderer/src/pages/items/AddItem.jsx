@@ -38,14 +38,14 @@ const AddItem = () => {
                 <p className={`${update ? "block" : "hidden"} text-gray-600 text-sm font-semibold self-start`}>{update.type == "item" ? "updating: " + update.data?.name + ", id: " + update.data?.id : ""}</p>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="name" className='font-semibold text-lg'>Item name</label>
-                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' required />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="price" className='font-semibold text-lg'>Item Price</label>
-                    <input type="number" name="price" id="price" placeholder="Enter Price" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="number" name="price" id="price" placeholder="Enter Price" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' required />
                 </fieldset>
                 <fieldset className='grid grid-cols-2 gap-2 p-1 w-96'>
-                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
+                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-red-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
 
                     <button type="submit" className="bg-green-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Submit" : "Update"}</button>
                 </fieldset>

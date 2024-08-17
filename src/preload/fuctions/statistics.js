@@ -51,10 +51,10 @@ export function UpdateStatistics(args) {
     due: 0
   }
   if (statsFolder.length > 0) {
-    console.log('folder ok')
+    
     let { data } = ReadSingleStatsFile(month + '-' + year + '.json')
     if (Array.isArray(data)) {
-      console.log('no file ')
+     
       let data = {}
       for (let i = 0; i < thisMonth; i++) {
         data[i + 1] = dataTemplate

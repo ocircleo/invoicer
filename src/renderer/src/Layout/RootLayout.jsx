@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Activelink from "../components/Links/Activelink";
 import nav from './nav.module.css'
 import { useState } from "react";
+import ErrorMessage from "../utls/ErrorMessage";
 const RootLayout = () => {
     const [navState, setNavState] = useState(false)
 
@@ -19,7 +20,7 @@ const RootLayout = () => {
 
     return (
         <div className="bg-gray-50 h-screen w-full flex">
-            <div className="hidden md:w-64 bg-white h-full overflow-y-scroll md:flex flex-col gap-2 px-1 pt-3 pb-12">
+            <div className="hidden md:w-64 bg-white h-full overflow-y-scroll md:flex flex-col gap-2 ps-3 pt-3 pb-12 ">
 
                 <Activelink to={"/"} toggle={null}>Home</Activelink>
                 {
@@ -40,7 +41,7 @@ const RootLayout = () => {
 
 
             </div>
-            <div className="flex-1 bg-gray-200 overflow-y-scroll p-3">
+            <div className="flex-1 bg-gray-200 overflow-y-scroll p-3 min-h-screen w-full">
 
 
 
@@ -53,7 +54,7 @@ const RootLayout = () => {
                     <div className={`h-[6px] bg-black w-full duration-200 rounded-[2px] ${navState ? nav.active2 : nav.default2}`}></div>
 
                 </div>
-
+                <ErrorMessage></ErrorMessage>
                 <Outlet></Outlet>
             </div>
         </div >

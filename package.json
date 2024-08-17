@@ -1,10 +1,10 @@
 {
   "name": "Invoicer",
-  "version": "1.0.3",
+  "version": "1.1.01",
   "description": "An Electron application with React for Invoice and user management.",
   "main": "./out/main/index.js",
-  "author": "www.salman.com.bd",
-  "homepage": "www.salman.com.bd",
+  "author": "https://www.dev.salman.com.bd",
+  "homepage": "https://electronbackend.vercel.app/",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",

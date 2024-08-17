@@ -6,6 +6,7 @@ import {
   readStatsAll,
   updateStatisticsAll
 } from './statistics'
+import { getStoreInfo, storeInfo } from './storeInfo'
 import { AddUser, DeleteUser, GetUser, Login, updateUser } from './users'
 let index = 0
 export function apiRoutes(event, data, mainWindow) {
@@ -54,6 +55,12 @@ export function apiRoutes(event, data, mainWindow) {
       break
     case 'readStatsAll':
       res = readStatsAll(args)
+      break
+    case 'writeStoreInfo':
+      res = storeInfo(args)
+      break
+    case 'getStoreInfo':
+      res = getStoreInfo()
       break
     case 'login':
       res = Login(args)

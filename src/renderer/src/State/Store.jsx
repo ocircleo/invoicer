@@ -5,6 +5,9 @@ import invoiceReducer from "./slice/invoiceSlice"
 import userReducer from "./slice/userSlice"
 import updateReducer from "./slice/updateSlice"
 import statsReducer from './slice/statisticsSlice'
+import errorReducer from './slice/errorSlice'
+import loggedReducer from './slice/loggedSlice'
+import storeReducer from './slice/storeSlice'
 export const store = configureStore({
     reducer: {
         items: itemsReducer,
@@ -12,6 +15,9 @@ export const store = configureStore({
         invoices: invoiceReducer,
         users: userReducer,
         update: updateReducer,
-        stats: statsReducer
+        stats: statsReducer,
+        error: errorReducer,
+        logged: loggedReducer,
+        store: storeReducer
     },
 })

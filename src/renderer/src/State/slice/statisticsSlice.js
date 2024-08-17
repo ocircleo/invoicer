@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  todaysStats: {},
-  monthlyStats: {income: 0, discount: 0, due: 0},
+  todaysStats: {topItem:"N/A",income: 0, discount: 0, due: 0},
+  monthlyStats: {topItem:"N/A",income: 0, discount: 0, due: 0},
   everyDayStats: []
 }
 

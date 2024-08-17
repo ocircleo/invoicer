@@ -47,9 +47,9 @@ const Pagination = () => {
     }
     useEffect(() => getPagination(), [])
     return (
-        <div>
+        <div className=" bg-orange-400 sticky w-full -bottom-3 py-4">
 
-            <div className="flex items-center gap-2 justify-center my-5">
+            <div className="flex items-center gap-2 justify-center ">
 
                 {/* {
                     pageButtons.map(ele => <SingleButton paginate={paginate} key={ele} active={active} totalPages={pageButtons.length} value={ele}></SingleButton>)

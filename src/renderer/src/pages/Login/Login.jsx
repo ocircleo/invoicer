@@ -1,11 +1,15 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../utls/Auth';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import ErrorMessage from '../../utls/ErrorMessage';
+import { useDispatch } from 'react-redux';
+import { updateError } from '../../State/slice/errorSlice';
+
 
 const Login = () => {
     let api = window.electron.ipcRenderer;
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch()
     const { setUser } = useContext(AuthContext)
     const togglePassword = () => {
         setShowPassword(!showPassword);
@@ -19,14 +23,12 @@ const Login = () => {
         api.send("api", { path: { to: "login", replyTo: "login" }, args })
     }
     api.on("login", (e, data) => {
-        if (data.found) {
+
+        if (!data.error) {
             setUser({ logged: true, detail: data.user })
             navigate("/");
         } else {
-            Swal.fire({
-                title: "User not found",
-                icon: "error",
-            })
+            dispatch(updateError({ error: true, message: data?.message }))
         }
     })
     return (
@@ -82,7 +84,8 @@ const Login = () => {
                     </div>
                 </div >
             </div >
-        </div >
+            <ErrorMessage></ErrorMessage>
+        </div>
     );
 };
 

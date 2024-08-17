@@ -18,8 +18,8 @@ export function GetUser(args) {
 export function AddUser(args) {
   const status = ReadFile('users.json')
   let data = status.data || []
-  let copy = data.filter((ele) => ele.id == args.id)
-  if (copy.length > 1) {
+  let copy = data.find((ele) => ele.id == args.id)
+  if (copy) {
     return { error: true, message: 'User id already exists', data: data }
   }
   data.push(args)
@@ -36,6 +36,8 @@ export function updateUser(args) {
       ele.email = args.email
       ele.role = args.role
       ele.password = args.password
+    } else {
+      AddUser(args)
     }
   })
   return WriteFile('users.json', data)
@@ -48,8 +50,20 @@ export function DeleteUser(args) {
   return WriteFile('users.json', newData)
 }
 export function Login(args) {
+  let defaultAdmin = {
+    id: -1,
+    name: 'admin name',
+    phone: '1111',
+    address: 'Dhaka',
+    shopName: '1',
+    role: 'admin',
+    password: 'log@admin'
+  }
+  if (args.phone == defaultAdmin.phone && args.password == defaultAdmin.password) {
+    return { error: false, user: defaultAdmin }
+  }
   const status = ReadFile('users.json')
   let data = status.data || []
   let user = data.find((ele) => ele.phone == args.phone && ele.password == args.password)
-  return { found: Boolean(user), user }
+  return { error: user.id ? false : true, message: user ? 'no need' : 'Wrong Password or Phone' }
 }

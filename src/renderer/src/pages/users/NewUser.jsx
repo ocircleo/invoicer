@@ -13,8 +13,7 @@ const NewUser = () => {
         e.preventDefault()
         let form, id, name, phone, address, shopName, password, role;
         form = e.target;
-        id = form.id.value;
-        console.log(id);
+        id = update.state ? update.data?.id : form.id.value;
         name = form.name.value;
         phone = form.phone.value;
         address = form.address.value;
@@ -65,32 +64,32 @@ const NewUser = () => {
     }, [update.state, update.data?.id])
     return (
         <>
-            <h1 className='text-xl font-bold text-center py-5' id='top'>{update.state && update.type == "user" ? "Update User" : "Add New User"}</h1>
-            <form ref={formRef} onSubmit={submitFrom} className=' flex flex-shrink-0 flex-wrap gap-1 items-center flex-col'>
+            <h1 className='text-xl font-bold underline underline-offset-4 text-center py-5' id='top'>{update.state && update.type == "user" ? "Update User" : "Add New User"}</h1>
+            <form ref={formRef} onSubmit={submitFrom} className=' flex flex-shrink-0 flex-wrap gap-1 items-center w-full md:w-4/5 justify-center'>
                 <p className={`${update ? "block" : "hidden"} text-gray-600 text-sm font-semibold self-start`}>{update.type == "user" ? "updating: " + update.data?.name + ", id: " + update.data?.id : ""}</p>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="id" className='font-semibold text-lg'>User ID</label>
-                    <input type="text" name="id" id="id" placeholder="Enter ID" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' required/>
+                    <input type="text" name="id" id="id" placeholder="Enter ID" className='w-full min-w-72 p-2 rounded border border-b-2 outline-none border-b-blue-500' required />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="name" className='font-semibold text-lg'>User name</label>
-                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' required/>
+                    <input type="text" name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' required />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="phone" className='font-semibold text-lg'>Phone Number</label>
-                    <input type="number" name="phone" id="phone" placeholder="Enter phone number" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="number" name="phone" id="phone" placeholder="Enter phone number" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="address" className='font-semibold text-lg'>Address</label>
-                    <input type="text" name="address" id="address" placeholder="Enter Address" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="text" name="address" id="address" placeholder="Enter Address" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="shopeName" className='font-semibold text-lg'>Shop Name</label>
-                    <input type="text" name="shopName" id="shopName" placeholder="Enter Shop Name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type="text" name="shopName" id="shopName" placeholder="Enter Shop Name" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' />
                 </fieldset>
                 <fieldset className='flex flex-col gap-2 p-1 w-96'>
                     <label htmlFor="role" className='font-semibold text-lg'>User Type</label>
-                    <select onChange={inputChange} name="role" id="role" className='p-2 rounded cursor-pointer'>
+                    <select onChange={inputChange} name="role" id="role" className='p-2 rounded cursor-pointer border shadow-inner'>
                         <option value="user" className='p-2'>User</option>
                         <option value="agent" className='p-2 cursor-pointer'>Agent</option>
                         <option value="admin" className='p-2 cursor-pointer'>Admin</option>
@@ -98,16 +97,16 @@ const NewUser = () => {
                 </fieldset>
                 <fieldset className={`flex flex-col gap-2 p-1 w-96 ${admin ? "flex" : "hidden"}`}>
                     <label htmlFor="password" className='font-semibold text-lg'>Password</label>
-                    <input type={`${show ? "text" : "password"}`} name="password" id="password" placeholder="Enter password" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                    <input type={`${show ? "text" : "password"}`} name="password" id="password" placeholder="Enter password" className='w-full min-w-72 p-2 rounded border  border-b-2 outline-none border-b-blue-500' />
 
                 </fieldset>
                 <fieldset className={` gap-2 items-center p-1 w-96 ${admin ? "flex" : "hidden"}`}>
-                    <input onChange={() => setShow(!show)} type="checkbox" name="show" id="show" className='h-4 w-4 cursor-pointer' />
-                    <label htmlFor="show" className='font-semibold text-lg select-none cursor-pointer'>show password</label>
+                    <input onChange={() => setShow(!show)} type="checkbox" name="show" id="show" className='h-4 w-4 cursor-pointer ' />
+                    <label htmlFor="show" className='font-semibold text-lg select-none cursor-pointer'>Show password</label>
 
                 </fieldset>
-                <fieldset className='grid grid-cols-2 gap-2 p-1 w-96'>
-                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-blue-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
+                <fieldset className='grid grid-cols-2 gap-2 p-1 w-full md:w-96 mt-12'>
+                    <button onClick={() => dispatch(updateState({ type: "", data: {}, state: false }))} type="reset" className="bg-red-600 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Reset" : "Cancel"}</button>
 
                     <button type="submit" className="bg-green-500 col-span-1 py-2 rounded text-white font-semibold">{!update.state ? "Submit" : "Update"}</button>
                 </fieldset>

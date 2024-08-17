@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PrintInvoice from "./PrintInvoice";
 import { DataContext } from "../../utls/APIHANDELER";
 import { useSelector } from "react-redux";
@@ -21,7 +21,7 @@ const NewInvoice = () => {
     today = `${year}-${month}-${day}`
 
     const saveToDB = (data, statsData) => {
-        console.log(statsData);
+
         api.send("api", { path: { to: "addInvoice", replyTo: null }, args: data })
         api.send("api", { path: { to: "updateStats", replyTo: null }, args: { xData: statsData } })
     }
@@ -83,7 +83,7 @@ const NewInvoice = () => {
         overallDiscount = Number(discount) / totalQuantity;
 
         invoiceData.income = initialTotal - Number(discount)
-        console.log(initialTotal);
+
         due = (initialTotal - Number(discount) - Number(paid)) / totalQuantity
         items.map(ele => {
             for (let i = 0; i < Number(ele.quantity); i++) {
@@ -100,7 +100,7 @@ const NewInvoice = () => {
             }
         })
         invoiceData.year = date.getFullYear(), invoiceData.month = date.getMonth(), invoiceData.day = date.getDate(), invoiceData.minutes = date.getMinutes(), invoiceData.hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours(), invoiceData.timeType = date.getHours() > 12 ? "PM" : "AM";
-        console.log(invoiceData);
+
         saveToDB(invoiceData, statsData);
         setData(invoiceData)
         setPrint(true)
@@ -146,7 +146,7 @@ const NewInvoice = () => {
                 initialTotal += sub;
             })
             let afterDiscount = initialTotal - Number(discount) || 0;
-            console.log(afterDiscount);
+
             let due = afterDiscount - Number(paid) || 0;
             setCalc({ subtotal: initialTotal, discount: discount, total: afterDiscount, paid: paid, due: due })
         }
@@ -197,7 +197,7 @@ const NewInvoice = () => {
         let parentDiv = e.target.parentElement.children[2];
         let text = target.value;
         let result = users.filter(ele => {
-            return ele.id.toLowerCase().includes(text.toLowerCase())
+            return ele.id == text
         })
         if (!parentDiv.classList.contains("fill-active")) {
             parentDiv.classList.add("fill-active");
@@ -397,8 +397,8 @@ const NewInvoice = () => {
         }
     }
     return (
-        <div onClick={handelClick} className="bg-gray-100">
-            <h1 className='text-xl font-bold text-center py-5' id='top'>Create New Invoice</h1>
+        <div onClick={handelClick} className="bg-white">
+            <h1 className='text-2xl underline underline-offset-4 font-semibold text-center py-5' id='top'>Create New Invoice</h1>
             <form ref={formRef} onSubmit={submitFrom} className='flex flex-col justify-center items-center'>
                 <div id="field" ref={fieldRef} className="grid grid-cols-6 gap-2 w-full px-12 items-center ">
                     <fieldset className='flex flex-col gap-2 p-1  col-span-5 lg:col-span-2 relative 1234' data-id="1234">
@@ -431,14 +431,14 @@ const NewInvoice = () => {
 
                     <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
                         <label htmlFor="userId" className='font-semibold text-lg'>User Id</label>
-                        <input onChange={userInfoFillById} type="text" required={true} name="userId" id="userId" placeholder="Enter User Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input onKeyUp={userInfoFillById} type="text" required={true} name="userId" id="userId" placeholder="Enter User Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
                         <label htmlFor="name" className='font-semibold text-lg'> name</label>
-                        <input onChange={userInfoFill} type="text" required={true} name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input onKeyUp={userInfoFill} type="text" required={true} name="name" id="name" placeholder="Enter new item name" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
@@ -453,7 +453,7 @@ const NewInvoice = () => {
                     </fieldset>
                     <fieldset className='flex flex-col gap-2 p-1 w-96 relative'>
                         <label htmlFor="agentName" className='font-semibold text-lg'>agent name or id</label>
-                        <input type="text" name="agentName" onChange={agentAutoFill} id="agentName" placeholder="Enter Agent Name or Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
+                        <input type="text" name="agentName" onKeyUp={agentAutoFill} id="agentName" placeholder="Enter Agent Name or Id" className='w-full min-w-72 p-2 rounded  border-b-2 outline-none border-blue-500' />
                         <div className="capitalize absolute max-h-44 w-full top-full left-0 rounded flex-col gap-2 p-1 overflow-y-scroll z-50">
 
                         </div>
@@ -500,7 +500,7 @@ const NewInvoice = () => {
             </form>
             <div className="overflow-hidden my-12">
 
-                <div ref={summeryRef} className="flex flex-wrap justify-center gap-5 text-xl   bg-white border-t-2  hover:-skew-x-12 hover:scale-110 duration-100 p-3 ">
+                <div ref={summeryRef} className="flex flex-wrap justify-center gap-5 text-xl   bg-blue-500 text-white border-t-2   hover:scale-110 duration-100 p-3 ">
                     <p><span className='font-semibold'>Subtotal:</span> {calc?.subtotal || 0} Tk</p>
                     <p><span className='font-semibold'>Discount: </span>{calc?.discount || 0} Tk</p>
                     <p><span className='font-semibold'>Total: </span>{calc?.total || 0} Tk</p>

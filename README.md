@@ -1,39 +1,33 @@
 # jewlers
 
 An Electron application with React
+ 
+=====================================
 
-per invoice size == 200 byte (estimated)
-1000 invoice == 200kb
-1 lakh invoice == 100 packet == 20 MB (estimated)
-RAM required 200MB
+### Developer -- Salman Hossain
+### Email -- salman@salman.com.bd
 
+The purpose of the application is to generate invoice for jewelry shop
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Features
+ - User can add product
+ - User can view product
+ - User can delete product
+ - User can generate invoice
+ - User can view invoice history
+ - User can delete invoice history
+ - User can add customer
+ - User can view customer
+ - login system for user
 
 
+### Default user phone and password
+phone: 1111
+password: log@admin
 
-
-
-
-
-
-
-
-
-
-
+copyright@salman
+all rights reserved
+=====================================
 
 ## Recommended IDE Setup
 

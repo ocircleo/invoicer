@@ -7,8 +7,8 @@ const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
             <div className="custom-tooltip">
-                <p className="label">{`May-${label} : Income: ${payload[0].value} TK`}</p>
-                <p className='label'>{`Discount: ${payload[0]?.payload?.discount} TK, Due: ${payload[0]?.payload?.due} TK`}</p>
+                <p className="label">{`May-${label} : Income: ${(payload[0]?.value).toFixed(2)} TK`}</p>
+                <p className='label'>{`Discount: ${(payload[0]?.payload?.discount).toFixed(2)} TK, Due: ${(payload[0]?.payload?.due).toFixed(2)} TK`}</p>
             </div>
         );
     }
@@ -38,7 +38,6 @@ const Graph = () => {
         if (formRef.current) {
             let yearValue = formRef.current.year.value
             let monthValue = formRef.current.month.value
-            console.log(yearValue, monthValue);
             readStatsAll({ day: null, month: monthValue, year: yearValue, replyTo: "readStatsAll" })
         }
     }
