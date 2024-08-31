@@ -55,6 +55,4 @@ $ npm run build:linux
 ```
 Developer -- Salman Hossain
 
-Email -- ```bash
-salman@salman.com.bd 
-```
+Email -- ``` salman@salman.com.bd ```
