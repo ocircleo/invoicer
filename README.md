@@ -22,9 +22,6 @@ An Electron application with React
 phone: 1111
 password: log@admin
 
-copyright@salman
-all rights reserved
-=====================================
 
 ## Recommended IDE Setup
 
@@ -57,4 +54,7 @@ $ npm run build:mac
 $ npm run build:linux
 ```
 Developer -- Salman Hossain
- Email -- `` salman@salman.com.bd ``
+
+Email -- ```bash
+salman@salman.com.bd 
+```
