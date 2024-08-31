@@ -1,13 +1,10 @@
-# jewlers
+# Invoicer
 
 An Electron application with React
  
 =====================================
 
-### Developer -- Salman Hossain
-### Email -- salman@salman.com.bd
-
-The purpose of the application is to generate invoice for jewelry shop
+## The purpose of the application is to generate invoice for shops
 
 ### Features
  - User can add product
@@ -59,3 +56,5 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+Developer -- Salman Hossain
+ Email -- `` salman@salman.com.bd ``
